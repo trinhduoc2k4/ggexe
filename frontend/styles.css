@@ -25,7 +25,8 @@ body, html {
 }
 
 #sheetSelect {
-    border: 15px solid transparent;
+    border: 1px solid transparent;
+    padding: 15px;
     background-color: DodgerBlue;
     color: #fff;
     border-radius: 5px;
@@ -151,4 +152,36 @@ table.timeline th {
 
 .api {
     background-color: #d2b48c;
+}
+
+#range {
+    padding: 15px;
+    border-radius: 25px;
+    border-width: 1px;
+}
+
+.center {
+    text-align: center !important;
+}
+
+button {
+    border-radius: 5px;
+}
+
+button:hover {
+    color: red;
+    filter: brightness(1.1);
+}
+
+select:hover {
+    filter: brightness(1.1);
+    cursor: pointer;
+}
+
+.m-15 {
+    margin: 15px;
+}
+
+.days {
+    min-width: 150px !important;
 }
