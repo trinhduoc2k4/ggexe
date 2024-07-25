@@ -56,16 +56,17 @@ app.post('/api/saveSheetData', async (req, res) => {
 app.post('/api/writeSheetData', async (req, res) => {
     const { data } = req.body;
     try {
-        const collection = db.collection(createCollection());
-        // await collection.insertMany(data.map(row => ({ data: row }))); data gửi lên là array
-        await collection.insertMany(data.map(row => ({
-            data: row 
-        })));
-        const getData = await collection.find({}).toArray();
+        // const collection = db.collection(createCollection());
+        // // await collection.insertMany(data.map(row => ({ data: row }))); data gửi lên là array
+        // await collection.insertMany(data.map(row => ({
+        //     data: row 
+        // })));
+        // const getData = await collection.find({}).toArray();
         // console.log(getData);
+        
         const response = {
             message: 'Write data successfully',
-            data: getData // Trả về dữ liệu đã nhận
+            data: data.map(row => row) // Trả về dữ liệu đã nhận
         };
         // Trả về dữ liệu JSON
         res.status(200).json(response);

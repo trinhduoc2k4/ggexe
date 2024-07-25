@@ -173,7 +173,7 @@
     // Fetch first 10 files
         response = await gapi.client.sheets.spreadsheets.values.get({
             spreadsheetId: fileId,
-            range: `${title}${space}`,
+            range: `${title}!${space.toUpperCase()}`,
     });
     } catch (err) {
         console.log(err);
@@ -251,16 +251,15 @@
   function  formatData(data) {
     console.log(data);
     const dataArr = []
-    const filter = data.filter(item => (item.data.length > 0 && item.data[1] !== ""));
+    const filter = data.filter(item => (item.length > 0 && item[1] !== ""));
     console.log(filter);
-    console.log(filter[0].data[1])
     filter.forEach((item, index) => {
       const data = {
         no: 1,
-        task: item.data[0],
+        task: item[0],
         time: 0,
         details: [
-            { time: item.data[3], desc: item.data[1], class: "" },
+            { time: item[3], desc: item[1], class: "" },
             // { time: 1.5, desc: "Server response time", class: "server-response" },
             // { time: 2.5, desc: "Asset and resource loading analysis", class: "asset-analysis" }
         ]
