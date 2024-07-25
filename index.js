@@ -3,7 +3,7 @@ const {google} = require("googleapis");
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
+const config = require('./config.json');
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,7 +12,7 @@ app.use(cors());
 const port = process.env.PORT || 1337;
 
 
-mongoose.connect('mongodb://localhost:27017/mydb');    
+mongoose.connect(config.mongodb.url);    
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -86,41 +86,39 @@ function createCollection() {
 }
 
 
-// insert data vào gg sheet
-async function writeSheetData(data) {
-    const auth = new google.auth.GoogleAuth({
-        keyFile: "credentials.json",
-        scopes: "https://www.googleapis.com/auth/spreadsheets",
-    });
-
-    const client = await auth.getClient();
-
-    const googleSheets = google.sheets({version: "v4", auth: client});
-
-    const spreadsheetId = "1vGefZlaW4eTENTStK4n7qVJ-70Dp_NsOnFhtAXH6Aho";
-
-    const metaData = await googleSheets.spreadsheets.get({
-        auth,
-        spreadsheetId,
-    });
-
-    const getRows = await googleSheets.spreadsheets.values.get({
-        auth,
-        spreadsheetId,
-        range: "Trang tính1"
-    });
-
-    await googleSheets.spreadsheets.values.update({
-        auth,
-        spreadsheetId,
-        range: "Trang tính1",
-        valueInputOption: "USER_ENTERED",
-        resource: {
-            values: data
-        }
-    });
-}
-
 app.listen(1337, (req, res) => console.log("running on 1337"));
 
+// insert data vào gg sheet
+// async function writeSheetData(data) {
+//     const auth = new google.auth.GoogleAuth({
+//         keyFile: "credentials.json",
+//         scopes: "https://www.googleapis.com/auth/spreadsheets",
+//     });
 
+//     const client = await auth.getClient();
+
+//     const googleSheets = google.sheets({version: "v4", auth: client});
+
+//     const spreadsheetId = "1vGefZlaW4eTENTStK4n7qVJ-70Dp_NsOnFhtAXH6Aho";
+
+//     const metaData = await googleSheets.spreadsheets.get({
+//         auth,
+//         spreadsheetId,
+//     });
+
+//     const getRows = await googleSheets.spreadsheets.values.get({
+//         auth,
+//         spreadsheetId,
+//         range: "Trang tính1"
+//     });
+
+//     await googleSheets.spreadsheets.values.update({
+//         auth,
+//         spreadsheetId,
+//         range: "Trang tính1",
+//         valueInputOption: "USER_ENTERED",
+//         resource: {
+//             values: data
+//         }
+//     });
+// }
