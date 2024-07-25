@@ -1,0 +1,154 @@
+body, html {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: antiquewhite;
+}
+
+.btn {
+    background-color: #04AA6D; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#content {
+    color: red;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#sheetSelect {
+    border: 15px solid transparent;
+    background-color: DodgerBlue;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.mt-15 {
+    margin-top: 15px;
+}
+
+#nameSelect {
+    padding: 10px;
+}
+
+#roleSelect {
+    padding: 10px;
+}
+
+#get_data {
+    color: red;
+    font-size: 20px;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+table.timeline {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.timeline th, table.timeline td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table.timeline th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.page-load {
+    background-color: #d9b3ff;
+}
+
+.server-response {
+    background-color: #ff9999;
+}
+
+.asset-analysis {
+    background-color: #d2b48c;
+}
+
+.meta-tags {
+    background-color: #ffd9b3;
+}
+
+.url-structure {
+    background-color: #d9b3ff;
+}
+
+.sitemap {
+    background-color: #ff9999;
+}
+
+.on-page-seo {
+    background-color: #d2b48c;
+}
+
+.https {
+    background-color: #ffd9b3;
+}
+
+.vulnerability {
+    background-color: #d9b3ff;
+}
+
+.secure-coding {
+    background-color: #ff9999;
+}
+
+.navigation {
+    background-color: #d2b48c;
+}
+
+.mobile-responsiveness {
+    background-color: #ffd9b3;
+}
+
+.accessibility {
+    background-color: #d9b3ff;
+}
+
+.content-layout {
+    background-color: #ff9999;
+}
+
+.code-structure {
+    background-color: #d9b3ff;
+}
+
+.next-js {
+    background-color: #ff9999;
+}
+
+.linting {
+    background-color: #d2b48c;
+}
+
+.dependency-management {
+    background-color: #ffd9b3;
+}
+
+.core-features {
+    background-color: #d9b3ff;
+}
+
+.third-party {
+    background-color: #ff9999;
+}
+
+.api {
+    background-color: #d2b48c;
+}
