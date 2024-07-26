@@ -56,29 +56,6 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
   /**
    *  Sign in the user upon button click.
    */
-  // function handleAuthClick() {
-  //   tokenClient.callback = async (response) => {
-  //     if (response.error !== undefined) {
-  //       throw (response);
-  //     }
-  //     accessToken = response.access_token;
-
-
-  //     document.getElementById('signout_button').style.visibility = 'visible';
-  //     document.getElementById('authorize_button').innerText = 'Refresh';
-  //     await createPicker();
-  //   };
-
-  //   if (accessToken === null) {
-  //     // Prompt the user to select a Google Account and ask for consent to share their data
-  //     // when establishing a new session.
-  //     tokenClient.requestAccessToken({prompt: 'consent'});
-  //   } else {
-  //     // Skip display of account chooser and consent dialog for an existing session.
-  //     tokenClient.requestAccessToken({prompt: ''});
-  //   }
-  // }
-
   function handleAuthClick() {
     if (accessToken !== null) {
       // Use the existing access token to log in directly
