@@ -147,28 +147,30 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
 
 
     //write data gg sheet
-    try {
-        const backendResponse = await fetch('http://localhost:1337/api/writeSheetData', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ data: response.result.values })
-        })
-      const res = await backendResponse.json();
-      const message = res.message;
-      const data = res.data;
-      
-      document.getElementById('content').innerText = message;
-      document.getElementById('table').innerHTML = formatData(data);
-    } catch (err) {
-      document.getElementById('content').innerText = 'Error saving data';
-    } 
+    // try {
+    //     const backendResponse = await fetch('http://localhost:1337/api/writeSheetData', {
+    //       method: 'POST',
+    //       headers: {
+    //           'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify({ data: response.result.values })
+    //     })
+    //   const res = await backendResponse.json();
+    //   const message = res.message;
+    //   const data = res.data;
+    //   document.getElementById('content').innerText = message;
+    //   document.getElementById('table').innerHTML = formatData(data);
+    // } catch (err) {
+    //   document.getElementById('content').innerText = 'Error saving data';
+    // } 
+    const data = response.result.values.map(row => row);
+    console.log("DAAATAA", data);
+    document.getElementById('table').innerHTML = formatData(data);
   }
 
-  function  formatData(data) {
+  function formatData(data) {
     console.log(data);
-    const dataArr = []
+    const dataArr = []  
     const filter = data.filter(item => (item.length > 0 && item[1] !== ""));
     console.log(filter);
     filter.forEach((item, index) => {
@@ -214,7 +216,7 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
     `;
 
     for (let i = 1; i <= colNumber; i++) {
-      tableHtml += `<th class="days center">${i}</th>`;
+      tableHtml += `<th class="center day">${i}</th>`;
     }
 
     tableHtml += `
@@ -234,6 +236,7 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
 
         tmpTime += detail.time;
         let colspan = tmpTime / 8;
+        console.log("AA", colspan);
         if (colspan > 1) {
           colspan = 2;
           tdNumber -= 1;
@@ -253,7 +256,7 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
 
         tableHtml += `<td style="background-color: ${getRandomColor()}" class="center" colspan="${colspan}">${detail.desc}</td>`;
 
-        for (let i = 1; i < (colNumber - tdNumberStandard); i++) {
+        for (let i = 1; i < (colNumber - tdNumberStandard + (colspan === 1 ? 1 : 0)); i++) {
           tableHtml += `<td></td>`;
         }
 
@@ -284,6 +287,7 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
                 ...detail,
                 time: parseFloat(detail.time.replace(',', '.'))
             })),
+            time: parseFloat(item.details[0].time.replace(',', '.'))
         };
         result.push(currentTask);
         currentNo++; // Tăng giá trị no khi gặp một task mới
