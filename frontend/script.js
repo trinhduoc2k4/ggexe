@@ -57,25 +57,34 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
    *  Sign in the user upon button click.
    */
   function handleAuthClick() {
-    if (accessToken !== null) {
+    if (accessToken) {
       // Use the existing access token to log in directly
       document.getElementById('signout_button').style.visibility = 'visible';
       document.getElementById('authorize_button').innerText = 'Refresh';
       createPicker();
     } else {
-      // Prompt the user to select a Google Account and ask for consent to share their data
-      tokenClient.callback = async (response) => {
-        if (response.error !== undefined) {
-          throw (response);
+        if(localStorage.getItem("access_token")) {
+            accessToken = localStorage.getItem("access_token");
+
+            document.getElementById('signout_button').style.visibility = 'visible';
+            document.getElementById('authorize_button').innerText = 'Refresh';
+            createPicker();
+        } else {
+            // Prompt the user to select a Google Account and ask for consent to share their data
+            tokenClient.callback = async (response) => {
+            if (response.error !== undefined) {
+              throw (response);
+            }
+            accessToken = response.access_token;
+            localStorage.setItem("access_token", accessToken);
+    
+            document.getElementById('signout_button').style.visibility = 'visible';
+            document.getElementById('authorize_button').innerText = 'Refresh';
+            await createPicker();
+          };
+      
+          tokenClient.requestAccessToken({ prompt: 'consent' });
         }
-        accessToken = response.access_token;
-  
-        document.getElementById('signout_button').style.visibility = 'visible';
-        document.getElementById('authorize_button').innerText = 'Refresh';
-        await createPicker();
-      };
-  
-      tokenClient.requestAccessToken({ prompt: 'consent' });
     }
   }
 
@@ -83,12 +92,13 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
    *  Sign out the user upon button click.
    */
   function handleSignoutClick() {
-    if (accessToken) {
-      accessToken = null;
-      google.accounts.oauth2.revoke(accessToken);
-      document.getElementById('content').innerText = '';
-      document.getElementById('authorize_button').innerText = 'Authorize';
-      document.getElementById('signout_button').style.visibility = 'hidden';
+    if (accessToken || localStorage.getItem("access_token")) {
+        localStorage.removeItem("access_token");    
+        accessToken = null;
+        google.accounts.oauth2.revoke(accessToken);
+        document.getElementById('content').innerText = '';
+        document.getElementById('authorize_button').innerText = 'Authorize';
+        document.getElementById('signout_button').style.visibility = 'hidden';
     }
   }
 
