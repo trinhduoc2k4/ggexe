@@ -183,5 +183,9 @@ select:hover {
 }
 
 .day {
-    min-width: 150px !important;
+    min-width: 75px !important;
 } 
+
+#table {
+    width: 100%;
+}

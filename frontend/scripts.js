@@ -181,7 +181,7 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
         task: item[0],
         time: 0,
         details: [
-            { time: item[3], desc: item[1], class: "" },
+            { time: (item[3] ?? "") === "" ? "0" : item[3] , desc: item[1], class: "" },
             // { time: 1.5, desc: "Server response time", class: "server-response" },
             // { time: 2.5, desc: "Asset and resource loading analysis", class: "asset-analysis" }
         ]
@@ -287,9 +287,9 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
             no: currentNo,
             details: item.details.map(detail => ({
                 ...detail,
-                time: parseFloat(detail.time.replace(',', '.'))
+                time: detail.time.includes(',') ? parseFloat(detail.time.replace(',', '.')) : parseFloat(detail.time)
             })),
-            time: parseFloat(item.details[0].time.replace(',', '.'))
+            time: item.details[0].time.includes(',') ? parseFloat(item.details[0].time.replace(',', '.')) : parseFloat(item.details[0].time)
         };
         result.push(currentTask);
         currentNo++; // Tăng giá trị no khi gặp một task mới
@@ -299,7 +299,7 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
               item.details.forEach(detail => {
                   currentTask.details.push({
                       ...detail,
-                      time: parseFloat(detail.time.replace(',', '.'))
+                      time: detail.time.includes(',') ? parseFloat(detail.time.replace(',', '.')) : parseFloat(detail.time)
                   });
               });
               // Cập nhật time của phần tử hiện tại bằng cách cộng dồn time từ details
