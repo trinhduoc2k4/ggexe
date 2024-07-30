@@ -4,6 +4,9 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
 
   const SCOPES = "https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/spreadsheets.readonly";
 
+  const GG_DRIVE_API = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
+  const GG_SHEET_API = 'https://sheets.googleapis.com/$discovery/rest?version=v4';
+
   let tokenClient;
   let accessToken = null;
   let pickerInited = false;
@@ -25,8 +28,17 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
    * discovery doc to initialize the API.
    */
   async function initializePicker() {
-    await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/drive/v3/rest');
-    await gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4');
+    // await gapi.client.load('https://www.googleapis.com/discovery/v1/apis/drive/v3/rest');
+    // await gapi.client.load('https://sheets.googleapis.com/$discovery/rest?version=v4');
+    // gapi.client.setApiKey(API_KEY);
+    await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: [GG_DRIVE_API],
+    });
+    await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: [GG_SHEET_API],
+    });
     pickerInited = true;
     maybeEnableButtons();
   }
@@ -65,7 +77,7 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
     } else {
         if(localStorage.getItem("access_token")) {
             accessToken = localStorage.getItem("access_token");
-
+            console.log(accessToken);
             document.getElementById('signout_button').style.visibility = 'visible';
             document.getElementById('authorize_button').innerText = 'Refresh';
             createPicker();
@@ -124,6 +136,7 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
    * @param {object} data - Containers the user selection from the picker
    */
   async function pickerCallback(data) {
+    console.log("vao 2222");
     if (data.action === google.picker.Action.PICKED) {
       let text = `Picker response: \n${JSON.stringify(data, null, 2)}\n`;
       const selectedFiles = data[google.picker.Response.DOCUMENTS];
@@ -191,7 +204,7 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
         task: item[0],
         time: 0,
         details: [
-            { time: (item[3] ?? "") === "" ? "0" : item[3] , desc: item[1], class: "" },
+            { time: (item[3] ?? "") === "" ? "0" : item[3] , desc: item[1] ?? "" , class: "" },
             // { time: 1.5, desc: "Server response time", class: "server-response" },
             // { time: 2.5, desc: "Asset and resource loading analysis", class: "asset-analysis" }
         ]
@@ -249,12 +262,24 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
         tmpTime += detail.time;
         let colspan = tmpTime / 8;
         console.log("AA", colspan);
-        if (colspan > 1) {
+        if (colspan > 1 && colspan <= 2) {
           colspan = 2;
           tdNumber -= 1;
           tmpTime = tmpTime % 8;
+        } else if(colspan > 2 && colspan <= 3) {
+          colspan = 3;
+          tdNumber -= 2;
+          tmpTime = tmpTime % 8;
+        } else if (colspan > 3 && colspan <= 4) {
+          colspan = 4;
+          tdNumber -= 3;
+          tmpTime = tmpTime % 8;
+        } else if (colspan > 4) {
+          colspan = 5;
+          tdNumber -= 4;
+          tmpTime = tmpTime % 8;
         }
-
+ 
         tableHtml += `<tr time="${tmpTime}">`;
         if (index === 0) {
           tableHtml += `<td rowspan="${task.details.length}">${task.no}</td>`;
@@ -266,7 +291,7 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
           tableHtml += `<td></td>`;
         }
 
-        tableHtml += `<td style="background-color: ${getRandomColor()}" class="center" colspan="${colspan}">${detail.desc}</td>`;
+        tableHtml += `<td style="background-color: ${!detail.desc ? '' : getRandomColor()}" class="center" colspan="${colspan}">${detail.desc}</td>`;
 
         for (let i = 1; i < (colNumber - tdNumberStandard + (colspan === 1 ? 1 : 0)); i++) {
           tableHtml += `<td></td>`;
@@ -321,13 +346,16 @@ const CLIENT_ID = "895893914279-cmijlnglcf8vud5ua7f4t0mme66gtov1.apps.googleuser
   }
 
   async function fetchSheetList(fileId) {
+    console.log(fileId, "vao dayyyy");
     let response;
     try {
         // Lấy metadata của bảng tính
         response = await gapi.client.sheets.spreadsheets.get({
             spreadsheetId: fileId,
         });
+        console.log("RESSS", response);
     } catch (err) {
+        console.log(err);
         document.getElementById('content').innerText = err.message;
         return;
     }
